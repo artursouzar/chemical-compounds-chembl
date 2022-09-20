@@ -4,6 +4,7 @@ A college assignment done to study ChEMBL (chemical compounds)
 
 
 Chemical Compounds Informations:
+
 Released Date:
 
 Last Version Date:
