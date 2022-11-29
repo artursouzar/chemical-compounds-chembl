@@ -1,1 +1,9 @@
-testing commits
+#Instaling packages and libraries
+library(dslabs)
+data(murders)
+library(dplyr)
+install.packages("data.table")
+library(data.table)
+install.packages("tidyverse")
+library(tidyverse)
+
