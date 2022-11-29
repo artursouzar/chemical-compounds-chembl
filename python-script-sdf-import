@@ -22,7 +22,7 @@ print(nmols)
 dados = []
 for mol in all_mols:
     cont_error += 1
-    if(cont_error >= 10000):
+    if(cont_error >= 50000):
         break
     dados.append(Chem.MolToSmiles(mol))
     dados.append(rdMolDescriptors.CalcMolFormula(mol))
