@@ -14,5 +14,5 @@ August 2022
 Who keeps it:
 EMBL's European Bioninformatics Institute (EMBL-EBI)
 
-Purpose of the Compound Library
+Purpose of the Compound Library:
 Data resources and analysis tools to support life science research.
