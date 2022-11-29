@@ -1,11 +1,38 @@
-# Install RDKit.
-%%capture
-!pip install rdkit-pypi
+#Installing rdkit and pandas
+!pip install rdkit 
+from rdkit import Chem, RDLogger
+import pandas as pd
+from rdkit.Chem import Descriptors, MolSurf, rdMolDescriptors, AllChem
 
-from rdkit import Chem
-from rdkit.Chem import Draw
-from rdkit.Chem.Draw import IPythonConsole
-from rdkit.Chem import Descriptors
-from rdkit.Chem import AllChem
-from rdkit import DataStructs
-import numpy as np
+#Creating Variable that will contains the chembl data
+sdf_file = 'chembl_31.sdf'
+
+#Variables that will contains some atributes of the dataset
+all_mols = Chem.SDMolSupplier(sdf_file)
+mol = all_mols[0]
+
+nmols = len(all_mols)
+cont_error = 0
+str_csv_file = ''
+i = all_mols[0]
+print(nmols)
+
+
+#Selecting data that we will use to analyse the dataset
+dados = []
+for mol in all_mols:
+    cont_error += 1
+    if(cont_error >= 10000):
+        break
+    dados.append(Chem.MolToSmiles(mol))
+    dados.append(rdMolDescriptors.CalcMolFormula(mol))
+    dados.append(round(Descriptors.ExactMolWt(mol),2))
+    dados.append(round(Descriptors.MolLogP(mol),2))
+    dados.append(Descriptors.NumHAcceptors(mol))
+    dados.append(Descriptors.NumHDonors(mol))
+    dados.append(rdMolDescriptors.CalcNumRotatableBonds(mol))
+    dados.append(round(MolSurf.TPSA(mol),2))
+    dados.append(Descriptors.RingCount(mol))
+    Chem.MolToMolBlock(mol)
+
+print(str(dados))
