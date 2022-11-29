@@ -36,3 +36,18 @@ for mol in all_mols:
     Chem.MolToMolBlock(mol)
 
 print(str(dados))
+
+
+
+#Definindo colunas e Linhas do Dataset
+mol_data_colum = ['SMILES', 'ExactMolWt', 'MolLogP', 'NumHAcceptors', 'NumHDonors', 'NumRotableBonds', 'RingCount', 'TPSA']
+mol_info_row = []
+contador_de_erro = 0
+count = 1
+for i in all_mols:
+  try:
+    mol_info.append([i.GetProp("SMILES"), Descriptors.ExactMolWt(i), rdkit.Chem.Crippen.MolLogP(i), rdkit.Chem.Lipinski.NumHAcceptors(i), rdkit.Chem.Lipinski.NumHDonors(i), rdkit.Chem.Lipinski.NumRotatableBonds(i), i.GetRingInfo().NumRings(), Descriptors.rdMolDescriptors.CalcTPSA(i)])
+  except:
+    contador_de_erro = contador_de_erro +1
+  
+print(mol_info[:100]) #Limitando número de dados para teste
