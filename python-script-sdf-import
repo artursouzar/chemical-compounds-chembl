@@ -1,59 +1,66 @@
-#Installing rdkit and pandas
-!pip install rdkit 
-from rdkit import Chem, RDLogger
+# Importing some important libraries
+from rdkit import Chem
+import rdkit
 import pandas as pd
-from rdkit.Chem import Descriptors, MolSurf, rdMolDescriptors, AllChem
-
+from IPython.utils import io
 #Creating Variable that will contains the chembl data
 sdf_file = 'chembl_31.sdf'
 
-#Variables that will contains some atributes of the dataset
-all_mols = Chem.SDMolSupplier(sdf_file)
-mol = all_mols[0]
+# Reading an archive .sdf in python
+dsMol = Chem.SDMolSupplier('chembl_31.sdf')
 
-nmols = len(all_mols)
-cont_error = 0
-str_csv_file = ''
-i = all_mols[0]
-print(nmols)
+#Just Testing
+dsMol
 
+# Creating a list to get all dicts 
+CHMBLDB_all_dicts = []
 
-#Selecting data that we will use to analyse the dataset
-dados = []
-for mol in all_mols:
-    cont_error += 1
-    if(cont_error >= 50000):
-        break
-    dados.append(Chem.MolToSmiles(mol))
-    dados.append(rdMolDescriptors.CalcMolFormula(mol))
-    dados.append(round(Descriptors.ExactMolWt(mol),2))
-    dados.append(round(Descriptors.MolLogP(mol),2))
-    dados.append(Descriptors.NumHAcceptors(mol))
-    dados.append(Descriptors.NumHDonors(mol))
-    dados.append(rdMolDescriptors.CalcNumRotatableBonds(mol))
-    dados.append(round(MolSurf.TPSA(mol),2))
-    dados.append(Descriptors.RingCount(mol))
-    Chem.MolToMolBlock(mol)
+# This loop gets all the atributes from a row of the DB and sets it to a dict
+for x in range(len(dsMol)):
+    globals()[f"CHMBLDB_dict_{x}"] = {
+        "CHMBL_ID": None,
+        "SMILES_Struct": None,
+        "Mol_wheight": None,
+        "Chem_LogP": None,
+        "Acceptors_Num": None,
+        "Donors_Num": None,
+        "Formula": None,
+        "Rotatables_Count": None,
+        "Rings_Num": None,
+        "Total_PSA": None, 
+    }
+    # This "try" command is necessary because some rows don't have all the necessary values acessed by the keys
+    # so we need to skip them a catch the exception
+    try:
+        # This "with" command supresses the outputs that are generated when accessing the database rows 
+        with io.capture_output() as captured:
+            globals()[f"CHMBLDB_dict_{x}"]['CHMBLDB_ID'] =  dsMol[x].GetProp("CHEMBL_ID")
+            globals()[f"CHMBLDB_dict_{x}"]['SMILES_Struct'] = dsMol[x].GetProp("CANONICAL_SMILES")
+            globals()[f"CHMBLDB_dict_{x}"]['Mol_wheight'] = float(dsMol[x].GetProp("QED_WEIGHTED"))
+            globals()[f"CHMBLDB_dict_{x}"]['Chem_LogP'] = float(dsMol[x].GetProp("ALOGP"))
+            globals()[f"CHMBLDB_dict_{x}"]['Acceptors_Num'] = int(dsMol[x].GetProp("HBA"))
+            globals()[f"CHMBLDB_dict_{x}"]['Donors_Num'] = int(dsMol[x].GetProp("HBD"))
+            globals()[f"CHMBLDB_dict_{x}"]['Formula'] = dsMol[x].GetProp("FULL_MOLFORMULA")
+            globals()[f"CHMBLDB_dict_{x}"]['Rotatables_Count'] = int(dsMol[x].GetProp("RTB"))
+            globals()[f"CHMBLDB_dict_{x}"]['Rings_Num'] = int(dsMol[x].GetProp("AROMATIC_RINGS"))
+            globals()[f"CHMBLDB_dict_{x}"]['Total_PSA'] = float(dsMol[x].GetProp("PSA"))
+    # The AtributeError happens when the roll is completely NULL/ when the row is "NoneType"
+    except AttributeError: 
+        print(f"Element {x}: Empty")
+        del globals()[f"CHMBLDB_dict_{x}"]
+        pass
+    # The KeyError happens when one of the row elements is NULL
+    except KeyError:
+        print(f"Element {x}: Invalid Value(s)")
+        del globals()[f"CHMBLDB_dict_{x}"]
+        pass
+    else:
+        CHMBLDB_all_dicts.append(globals()[f"CHMBLDB_dict_{x}"])
+        
+        # Here we concat all the dicts to form a bigger dict and turn them into a DataFrame
+df = pd.concat([pd.Series(d) for d in CHMBLDB_all_dicts], axis=1).fillna(0).T
 
-print(str(dados))
+# For last, the DataFrame is converted into a .csv file
+# The items are divided by ";" 
+df.to_csv('CHMBLDB_items.csv', encoding = 'utf-8', sep = ";", header = True)
 
-
-
-#Defining colums and row's that we will use for export to csv
-mol_data_colum = ['CANONICAL_SMILES', 'QED_WEIGHTED', 'ALOGP', 'HBA', 'HBD', 'RTB', 'AROMATIC_RINGS', 'PSA']
-mol_info_row = []
-contador_de_erro = 0
-count = 1
-for i in all_mols:
-  try:
-    mol_info_row.append([i.GetProp("CANONICAL_SMILES"), Descriptors.ExactMolWt(i), rdkit.Chem.Crippen.MolLogP(i), rdkit.Chem.Lipinski.NumHAcceptors(i), rdkit.Chem.Lipinski.NumHDonors(i), rdkit.Chem.Lipinski.NumRotatableBonds(i), i.GetRingInfo().NumRings(), Descriptors.rdMolDescriptors.CalcTPSA(i)])
-  except:
-    contador_de_erro = contador_de_erro +1
-  
-print(mol_info[:50]) #Limitando número de dados para teste
-
-#Firts test part 2
-with open(r'tuts@Arturs-MacBook-Air csv_fileChembl', 'w', encoding='UTF8', newline='') as f:
-    writer = csv.writer(f)
-    writer.writerow(mol_data_colum)
-    writer.writerows(mol_info_raw)
