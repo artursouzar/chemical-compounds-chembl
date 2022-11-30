@@ -39,7 +39,7 @@ print(str(dados))
 
 
 
-#Definindo colunas e Linhas do Dataset
+#Defining colums and row's that we will use for export to csv
 mol_data_colum = ['SMILES', 'ExactMolWt', 'MolLogP', 'NumHAcceptors', 'NumHDonors', 'NumRotableBonds', 'RingCount', 'TPSA']
 mol_info_row = []
 contador_de_erro = 0
@@ -51,3 +51,9 @@ for i in all_mols:
     contador_de_erro = contador_de_erro +1
   
 print(mol_info[:100]) #Limitando número de dados para teste
+
+#Firts test part 2
+with open(r'tuts@Arturs-MacBook-Air csv_fileChembl', 'w', encoding='UTF8', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow(mol_data_colum)
+    writer.writerows(mol_info_raw)
