@@ -88,4 +88,19 @@ variancia <- var(df_tratado_filtrado)
 
 #Gráficos 
 #Graphics
+
+#Polar Surface Area x Hba
 ggplot(df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$hba, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
+
+#Polar Surface Area x Hbd
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$hbd, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
+
+#Polar Surface Area x Molecular Weight
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$molecular_weight, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
+
+#Polar Surface Area x Rotatable Bonds
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$rotatable_bonds, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
+
+#Polar Surface Area x AlogP
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$alogp, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
+
