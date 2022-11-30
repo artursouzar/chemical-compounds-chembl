@@ -3,8 +3,8 @@
 from rdkit import Chem
 from rdkit.Chem.ChemUtils import SDFToCSV
 
-# Cria Gerenciador de contexto para o arquivo 'data_pubchem.csv'.
-# Creates de Context Manager for the file 'data_pubchem.csv'.
+# Cria Gerenciador de contexto para o arquivo 'chEMBLDataBase.csv'.
+# Creates de Context Manager for the file 'chEMBLDataBase.csv'.
 with open('data_Chembl.csv', 'w') as file:
     # Associa a variável 'molecules' ao leitor de arquivos SDF.
     # Associates the variable's value to the SDF reader.
