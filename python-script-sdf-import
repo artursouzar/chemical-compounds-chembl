@@ -40,17 +40,17 @@ print(str(dados))
 
 
 #Defining colums and row's that we will use for export to csv
-mol_data_colum = ['SMILES', 'ExactMolWt', 'MolLogP', 'NumHAcceptors', 'NumHDonors', 'NumRotableBonds', 'RingCount', 'TPSA']
+mol_data_colum = ['CANONICAL_SMILES', 'QED_WEIGHTED', 'ALOGP', 'HBA', 'HBD', 'RTB', 'AROMATIC_RINGS', 'PSA']
 mol_info_row = []
 contador_de_erro = 0
 count = 1
 for i in all_mols:
   try:
-    mol_info.append([i.GetProp("SMILES"), Descriptors.ExactMolWt(i), rdkit.Chem.Crippen.MolLogP(i), rdkit.Chem.Lipinski.NumHAcceptors(i), rdkit.Chem.Lipinski.NumHDonors(i), rdkit.Chem.Lipinski.NumRotatableBonds(i), i.GetRingInfo().NumRings(), Descriptors.rdMolDescriptors.CalcTPSA(i)])
+    mol_info_row.append([i.GetProp("CANONICAL_SMILES"), Descriptors.ExactMolWt(i), rdkit.Chem.Crippen.MolLogP(i), rdkit.Chem.Lipinski.NumHAcceptors(i), rdkit.Chem.Lipinski.NumHDonors(i), rdkit.Chem.Lipinski.NumRotatableBonds(i), i.GetRingInfo().NumRings(), Descriptors.rdMolDescriptors.CalcTPSA(i)])
   except:
     contador_de_erro = contador_de_erro +1
   
-print(mol_info[:100]) #Limitando número de dados para teste
+print(mol_info[:50]) #Limitando número de dados para teste
 
 #Firts test part 2
 with open(r'tuts@Arturs-MacBook-Air csv_fileChembl', 'w', encoding='UTF8', newline='') as f:
