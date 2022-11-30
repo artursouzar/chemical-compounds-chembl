@@ -39,3 +39,7 @@ db_chembl_filter$Molecular.Formula
 db_chembl_filter$X.Rotatable.Bonds
 db_chembl_filter$Polar.Surface.Area
 
+#Testando se a função funcionaria antes de mudar o tipo de cada linha
+#Testing if the function would work before changing the class of each row
+db_chembl_filter_semNA <- na.omit(db_chembl_filter)
+db_chembl_filter_semNA$HBD
