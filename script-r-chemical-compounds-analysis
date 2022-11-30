@@ -43,3 +43,49 @@ db_chembl_filter$Polar.Surface.Area
 #Testing if the function would work before changing the class of each row
 db_chembl_filter_semNA <- na.omit(db_chembl_filter)
 db_chembl_filter_semNA$HBD
+
+
+#Transformando dados em tipo númerico e Caractere e Criando variáveis
+#Switching data type and creating variables
+hba <- as.numeric(db_chembl_filter$HBA)
+hbd <-as.numeric(db_chembl_filter$HBD)
+alogp <-as.numeric(db_chembl_filter$AlogP)
+molecular_weight <-as.numeric(db_chembl_filter$Molecular.Weight)
+rotatable_bonds <-as.numeric(db_chembl_filter$X.Rotatable.Bonds)
+psa <-as.numeric(db_chembl_filter$Polar.Surface.Area)
+smiles <-as.character(db_chembl_filter$Smiles)
+molecular_formula <-as.character(db_chembl_filter$Molecular.Formula)
+
+#Criando novo Data Frame para armazenar novas variáveis e excluindo NA's
+#Creating new data frame to load the new variables and excluding the NA's
+Novo_df_numerico <- data.frame(hba,hbd,alogp,molecular_formula,molecular_weight,rotatable_bonds,psa,smiles)
+df_tratado_filtrado<- na.omit(Novo_df_numerico)
+
+
+
+#Calculando Desvio-Padrão
+#Standard deviation
+desvio_hba <- sd(df_tratado_filtrado$hba)
+desvio_hbd <- sd(df_tratado_filtrado$hbd)
+desvio_alogp <- sd(df_tratado_filtrado$alogp)
+desvio_molecular_weight <- sd(df_tratado_filtrado$molecular_weight)
+desvio_psa <- sd(df_tratado_filtrado$psa)
+desvio_rotatablebonds <- sd(df_tratado_filtrado$rotatable_bonds)
+
+#Criando Data frame pra unificar em uma tabela
+#Creating Data Frame to group everything in a table 
+desvio_padrao_tabela <- data.frame(desvio_hba,desvio_hbd,desvio_alogp,desvio_molecular_weight,desvio_psa,desvio_rotatablebonds)
+
+# Correlacao 
+# Linear correlation
+correlacao_linear <- cor(select(df_tratado_filtrado, alogp, rotatable_bonds, psa, hba, hbd, molecular_weight))
+
+                  
+#Variância
+#Variance
+variancia <- var(df_tratado_filtrado)
+
+
+#Gráficos 
+#Graphics
+ggplot(df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$hba, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
