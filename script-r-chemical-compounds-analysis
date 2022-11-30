@@ -104,3 +104,10 @@ ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtra
 #Polar Surface Area x AlogP
 ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$alogp, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
 
+# Boxplot of Every Column
+boxplot(df_tratado_filtrado$hba)
+boxplot(df_tratado_filtrado$Phbd)
+boxplot(df_tratado_filtrado$alogp)
+boxplot(df_tratado_filtrado$rotatable_bonds)
+boxplot(df_tratado_filtrado$molecular_weight)
+boxplot(df_tratado_filtrado$do$psa)
