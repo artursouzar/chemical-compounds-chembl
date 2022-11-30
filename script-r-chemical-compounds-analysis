@@ -1,9 +1,41 @@
-#Instaling packages and libraries
-library(dslabs)
-data(murders)
-library(dplyr)
-install.packages("data.table")
-library(data.table)
+#Instalando Bibliotecas e Pacotes
+#Installing Packages and libraries
+install.packages("readxl")
 install.packages("tidyverse")
+install.packages("data.table")
+install.packages("dplyr")
+install.packages("ggplot2")
+library(dplyr)
+library(data.table)
 library(tidyverse)
+library(readxl)
+
+#Importando Base de Dados
+#Importing Data Base
+db_chembl <- read.csv2("chEMBLDataBase.csv")
+
+#Filtrando dados
+# Creating a Filter for the data
+db_chembl_filter <- select(db_chembl,Smiles,HBA,HBD,AlogP,Molecular.Weight,Molecular.Formula,X.Rotatable.Bonds,Polar.Surface.Area)
+
+#Apagando antiga base de dados que tinha colunas indesejadas
+#Erasing older data base that had columns that we didn't wanted
+rm(db_chembl)
+
+#Visualizando base de dados 
+#Viewingdata base
+class(db_chembl_filter)
+str(db_chembl_filter)
+summary(db_chembl_filter)
+
+#Printando para visualizar cada coluna
+#Printing to have a better view at the data each column
+db_chembl_filter$Smiles 
+db_chembl_filter$HBA
+db_chembl_filter$HBD
+db_chembl_filter$AlogP
+db_chembl_filter$Molecular.Weight
+db_chembl_filter$Molecular.Formula
+db_chembl_filter$X.Rotatable.Bonds
+db_chembl_filter$Polar.Surface.Area
 
