@@ -10,6 +10,7 @@ library(data.table)
 library(tidyverse)
 library(readxl)
 
+
 #Importando Base de Dados
 #Importing Data Base
 db_chembl <- read.csv2("chEMBLDataBase.csv")
@@ -103,6 +104,10 @@ i_min_ring <- which.min(df_tratado_filtrado$ring_count)
 i_max_ring
 i_min_ring
 
+#Data frame de máximo e mínimo ring e rotatable
+#Max and Mininimu of Ring and Rotatable Data Frame
+tabela_max_min_ring_rotatable <-data.frame(i_max_ring,i_min_ring,i_max_rotatable,i_min_rotatable)
+
 #Media e Mediana de Rotatablet
 #Mean and Median of Rotatablet
 mean(df_tratado_filtrado$rotatable_bonds)
@@ -123,6 +128,15 @@ max(molWheight)
 i_max <- which.max(df_tratado_filtrado$molecular_weight)
 min(molWheight)
 i_min <- which.min(df_tratado_filtrado$molecular_weight)
+
+#Média de Peso Moleculas
+#Mean of Molecule Wheight
+mean_molWeight <- mean(df_tratado_filtrado$molecular_weight)
+median_molWeight <- median(df_tratado_filtrado$molecular_weight)
+
+#Data frame de média e mediana peso das moleculas
+#Molecules Wheight mean and median 
+mmmm_molWheight <- data.frame(mean_molWeight,median_molWeight,i_max, i_min)
 
 #Calculando Variância
 #Calculating Variance
@@ -160,6 +174,7 @@ boxplot(df_tratado_filtrado$alogp)
 boxplot(df_tratado_filtrado$rotatable_bonds)
 boxplot(df_tratado_filtrado$molecular_weight)
 boxplot(df_tratado_filtrado$do$psa)
+boxplot(df_tratado_filtrado$ring_count)
 
 #Insights do Peso de cada Molécula
 #Insighst Molecular Weight
@@ -209,3 +224,6 @@ ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x = rotatable_bonds,
 ggplot(data = df_tratado_filtrado) +
   geom_point(mapping = aes(x = rotatable_bonds, y = hbd)) +
   facet_grid(ring_count ~ hba)
+
+#Creating Hist about Ring Count to have a better view
+hist(df_tratado_filtrado$ring_count)
