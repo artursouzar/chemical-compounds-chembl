@@ -20,7 +20,7 @@ db_chembl_filter <- select(db_chembl,Smiles,HBA,HBD,AlogP,Molecular.Weight,Molec
 
 #Removendo base de Dados que não vamos mais utilizar depois do filtro
 #After remove the filter we can remove the big table with all elements
-rm(db_chembl)
+rm(db_chemb5)
 
 #Visualizando base de dados 
 #Viewingdata base
@@ -66,7 +66,16 @@ ring_count <- as.numeric(db_chembl_filter$Aromatic.Rings)
 Novo_df_numerico <- data.frame(hba,hbd,alogp,molecular_formula,molecular_weight,rotatable_bonds,psa,smiles,ring_count)
 df_tratado_filtrado<- na.omit(Novo_df_numerico)
 
+#DataFrame Inteiro
+#Hole Data Frame
+# Correlacao 
+# Linear correlation
+correlacao_linear <- cor(select(df_tratado_filtrado, alogp, rotatable_bonds, psa, hba, hbd, molecular_weight))
 
+
+#Variância
+#Variance
+variancia <- var(df_tratado_filtrado)
 
 #Calculando Desvio-Padrão
 #Standard deviation
@@ -81,14 +90,48 @@ desvio_rotatablebonds <- sd(df_tratado_filtrado$rotatable_bonds)
 #Creating Data Frame to group everything in a table 
 desvio_padrao_tabela <- data.frame(desvio_hba,desvio_hbd,desvio_alogp,desvio_molecular_weight,desvio_psa,desvio_rotatablebonds)
 
-# Correlacao 
-# Linear correlation
-correlacao_linear <- cor(select(df_tratado_filtrado, alogp, rotatable_bonds, psa, hba, hbd, molecular_weight))
 
-                  
-#Variância
-#Variance
-variancia <- var(df_tratado_filtrado)
+#Media e Mediana de Ring Count
+#Mean and Median of Ring Count
+mean(df_tratado_filtrado$ring_count)
+median(df_tratado_filtrado$ring_count)
+
+#Máximo e Mínimo de Ring Count
+#Max and Minimum of Ring Counts
+i_max_ring <- which.max(df_tratado_filtrado$ring_count)
+i_min_ring <- which.min(df_tratado_filtrado$ring_count)
+i_max_ring
+i_min_ring
+
+#Media e Mediana de Rotatablet
+#Mean and Median of Rotatablet
+mean(df_tratado_filtrado$rotatable_bonds)
+median(df_tratado_filtrado$rotatable_bonds)
+
+#Máximo e Mínimo de Rotatable
+#Max and Minimum of rotatable
+i_max_rotatable <- which.max(df_tratado_filtrado$rotatable_bonds)
+i_min_rotatable <- which.min(df_tratado_filtrado$rotatable_bonds)
+i_max_rotatable
+i_min_rotatable
+
+#Insights do Peso de cada Molécula
+#Insighst Molecular Weight
+#Peso Máximo e Mínimo
+#Max and Minimum Wheight
+max(molWheight)
+i_max <- which.max(df_tratado_filtrado$molecular_weight)
+min(molWheight)
+i_min <- which.min(df_tratado_filtrado$molecular_weight)
+
+#Calculando Variância
+#Calculating Variance
+varianciaMW <- var(df_tratado_filtrado$molecular_weight)
+
+#Verificando classe e calculando Desvio Padrão
+#Verifying class and calculating standar deviation
+class(df_tratado_filtrado$molecular_weight)
+standardMW <- sd(df_tratado_filtrado$molecular_weight)
 
 
 #Gráficos 
@@ -166,4 +209,3 @@ ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x = rotatable_bonds,
 ggplot(data = df_tratado_filtrado) +
   geom_point(mapping = aes(x = rotatable_bonds, y = hbd)) +
   facet_grid(ring_count ~ hba)
-
