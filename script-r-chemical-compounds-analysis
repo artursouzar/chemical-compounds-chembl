@@ -155,3 +155,15 @@ plot(df_tratado_filtrado$ring_count, df_tratado_filtrado$rotatable_bonds, type="
 #Ring Count x HBA
 plot(df_tratado_filtrado$ring_count, df_tratado_filtrado$hba, type="p",pch = 8,col = "blue")
 
+#Rotatable Bonds x HBD x Ring Count
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x = rotatable_bonds, y = hbd, alpha = ring_count), color = "blue")
+
+#Rotatable Bonds x HBA x Ring Count
+ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x = rotatable_bonds, y = hba, alpha = ring_count), color = "blue")
+
+#Gráfico só por curiosidade
+#Graphic just for fun
+ggplot(data = df_tratado_filtrado) +
+  geom_point(mapping = aes(x = rotatable_bonds, y = hbd)) +
+  facet_grid(ring_count ~ hba)
+
