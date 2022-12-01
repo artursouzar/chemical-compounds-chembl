@@ -1,5 +1,5 @@
-#Instalando Bibliotecas e Pacotes
-#Installing Packages and libraries
+#Instalando Pacotes e Bibliotecas
+#Installing Packages and Libraries
 install.packages("readxl")
 install.packages("tidyverse")
 install.packages("data.table")
@@ -16,10 +16,10 @@ db_chembl <- read.csv2("chEMBLDataBase.csv")
 
 #Filtrando dados
 # Creating a Filter for the data
-db_chembl_filter <- select(db_chembl,Smiles,HBA,HBD,AlogP,Molecular.Weight,Molecular.Formula,X.Rotatable.Bonds,Polar.Surface.Area)
+db_chembl_filter <- select(db_chembl,Smiles,HBA,HBD,AlogP,Molecular.Weight,Molecular.Formula,X.Rotatable.Bonds,Polar.Surface.Area, Aromatic.Rings)
 
-#Apagando antiga base de dados que tinha colunas indesejadas
-#Erasing older data base that had columns that we didn't wanted
+#Removendo base de Dados que não vamos mais utilizar depois do filtro
+#After remove the filter we can remove the big table with all elements
 rm(db_chembl)
 
 #Visualizando base de dados 
@@ -28,8 +28,8 @@ class(db_chembl_filter)
 str(db_chembl_filter)
 summary(db_chembl_filter)
 
-#Printando para visualizar cada coluna
-#Printing to have a better view at the data each column
+#Printando para visualizar
+#Printing to have a better view at the data
 db_chembl_filter$Smiles 
 db_chembl_filter$HBA
 db_chembl_filter$HBD
@@ -38,11 +38,15 @@ db_chembl_filter$Molecular.Weight
 db_chembl_filter$Molecular.Formula
 db_chembl_filter$X.Rotatable.Bonds
 db_chembl_filter$Polar.Surface.Area
+db_chembl_filter$Polar.Aromatic.Rings
+
+class(db_chembl_filter)
 
 #Testando se a função funcionaria antes de mudar o tipo de cada linha
 #Testing if the function would work before changing the class of each row
 db_chembl_filter_semNA <- na.omit(db_chembl_filter)
 db_chembl_filter_semNA$HBD
+
 
 
 #Transformando dados em tipo númerico e Caractere e Criando variáveis
@@ -55,10 +59,11 @@ rotatable_bonds <-as.numeric(db_chembl_filter$X.Rotatable.Bonds)
 psa <-as.numeric(db_chembl_filter$Polar.Surface.Area)
 smiles <-as.character(db_chembl_filter$Smiles)
 molecular_formula <-as.character(db_chembl_filter$Molecular.Formula)
+ring_count <- as.numeric(db_chembl_filter$Aromatic.Rings)
 
 #Criando novo Data Frame para armazenar novas variáveis e excluindo NA's
 #Creating new data frame to load the new variables and excluding the NA's
-Novo_df_numerico <- data.frame(hba,hbd,alogp,molecular_formula,molecular_weight,rotatable_bonds,psa,smiles)
+Novo_df_numerico <- data.frame(hba,hbd,alogp,molecular_formula,molecular_weight,rotatable_bonds,psa,smiles,ring_count)
 df_tratado_filtrado<- na.omit(Novo_df_numerico)
 
 
@@ -104,6 +109,7 @@ ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtra
 #Polar Surface Area x AlogP
 ggplot(data=df_tratado_filtrado) + geom_point(mapping = aes(x= df_tratado_filtrado$alogp, y= df_tratado_filtrado$psa, alpha= df_tratado_filtrado$psa)) 
 
+
 # Boxplot of Every Column
 boxplot(df_tratado_filtrado$hba)
 boxplot(df_tratado_filtrado$Phbd)
@@ -111,3 +117,22 @@ boxplot(df_tratado_filtrado$alogp)
 boxplot(df_tratado_filtrado$rotatable_bonds)
 boxplot(df_tratado_filtrado$molecular_weight)
 boxplot(df_tratado_filtrado$do$psa)
+
+#Insights do Peso de cada Molécula
+#Insighst Molecular Weight
+
+#Peso Máximo e Mínimo
+#Max and Minimum Wheight
+max(molWheight)
+i_max <- which.max(df_tratado_filtrado$molecular_weight)
+min(molWheight)
+i_min <- which.min(df_tratado_filtrado$molecular_weight)
+
+#Verificando classe e calculando Desvio Padrão
+#Verifying class and calculating standar deviation
+class(df_tratado_filtrado$molecular_weight)
+standardMW <- sd(df_tratado_filtrado$molecular_weight)
+
+#Calculando Variância
+#Calculating Variance
+varianciaMW <- var(df_tratado_filtrado$molecular_weight)
